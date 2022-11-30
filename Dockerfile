@@ -14,6 +14,6 @@ USER node:node
 COPY --from=builder --chown=node:node /app/build ./build
 COPY --from=builder --chown=node:node /app/node_modules ./node_modules
 COPY --chown=node:node package.json .
-ENV PORT 8010
-EXPOSE 8010
+ENV PORT 8081
+EXPOSE 8081
 CMD ["node", "build"]
