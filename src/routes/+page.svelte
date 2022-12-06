@@ -7,17 +7,26 @@
 	import Upload from '$lib/components/icons/upload.svelte';
 	import { graphql } from '$lib/data/graphql';
 	import { TRANSLATION } from '$lib/data/queries/translate';
+	import SettingsMenu from '$lib/components/SettingsMenu.svelte';
+	import { languages } from '$lib/types/languages';
 
-	let fromLanguage = 'Mandarin';
-	let toLanguage = 'English';
+	let fromLanguage = 'English';
+	let toLanguage = 'French';
 
 	let translation = '';
 
 	let tryTranslate = async () => {
 		translation = '';
 		const textInput:HTMLInputElement|null = document.querySelector("#textInput");
+		const fromLanguageInput:HTMLInputElement|null = document.querySelector("#fromLanguageInput");
+		const toLanguageInput:HTMLInputElement|null = document.querySelector("#toLanguageInput");
+
 		let text;
-		if (textInput) text = textInput.value;
+		if (textInput && toLanguageInput && fromLanguageInput) {
+			text = textInput.value;
+			fromLanguage = fromLanguageInput.value;
+			toLanguage = toLanguageInput.value;
+		}
 		else return
 		if (text.length === 0) return
 		try {
@@ -47,24 +56,34 @@
 			<Star color={COLORS.darkGrey}/>
 		</div>
 		<h1>Translate</h1>
-		<div>
-			<Settings color={COLORS.darkGrey}/>
-		</div>
+		<SettingsMenu/>
 	</header>
 	<section class="languageSelect">
-		<div class="fromLanguage">
-			<p class="languageName">{fromLanguage}</p>
-		</div>
-		<div class="swapIcon">
+		<select value={fromLanguage} class="fromLanguage" id="fromLanguageInput" on:change={tryTranslate}>
+			{#each languages as language}
+				<option value={language}>{language}</option>
+			{/each}
+		</select>
+		<button class="swapIcon">
 			<Swap color={COLORS.darkGrey}/>
-		</div>
-		<div class="toLanguage">
-			<p class="languageName">{toLanguage}</p>
-		</div>
+		</button>
+		<select value={toLanguage} class="toLanguage" id="toLanguageInput"  on:change={tryTranslate}>
+			{#each languages as language}
+				<option value={language}>{language}</option>
+			{/each}
+			<!-- <p class="languageName">{toLanguage}</p> -->
+		</select>
 	</section>
 
 	<section class="textArea">
-		<textarea id="textInput" placeholder="Enter text here..." on:change={() => tryTranslate()}></textarea>
+		<textarea 
+			id="textInput" 
+			placeholder="Enter text here..." 
+			on:keydown={(e) => {if (e.key === 'Enter') tryTranslate()}}
+		></textarea>
+		<p>
+			{translation}
+		</p>
 		<div class="document">
 			<button on:click={() => {}}>
 				<div>
@@ -78,6 +97,12 @@
 </article>
 
 <style lang="scss">
+	button {
+		background-color: transparent;
+		border: none;
+		outline: none;
+		cursor: pointer;
+	}
 	article {
 		display: flex;
 		flex-direction: column;
@@ -118,13 +143,12 @@
 				align-items: center;
 				justify-content: center;
 				border-radius: 1rem;
+				font-size: 1.5rem;
+				text-align: center;
+				border: none;
+				color: white;
 				width: 100%;
 				height: 100%;
-				.languageName {
-					font-size: 1.5rem;
-					text-align: center;
-					color: white
-				}
 			}
 			.fromLanguage {
 				background-color: color('swr_green');
@@ -143,6 +167,13 @@
 				min-height: 6rem;
 				resize:vertical;
 				font-size: 1.3rem;
+			}
+			p {
+				border-top: 1px solid color('_darkGrey');
+				padding: 0.6rem;
+				width: 100%;
+				font-size: 1.3rem;
+				background-color: white;
 			}
 			.document {
 				display: flex;
