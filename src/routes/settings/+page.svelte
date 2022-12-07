@@ -34,7 +34,9 @@
 
 <article>
 	<header>
-		<Icon icon={'leftArrow'} color={COLORS.darkGrey} height='1.5rem' width='1.5rem'/>
+		<button on:click={() => {goto('/')}}>
+			<Icon icon={'leftArrow'} color={COLORS.darkGrey} height='1.5rem' width='1.5rem'/>
+		</button>
 		<h1>Settings</h1>
 	</header>
 	<section class='info'>
