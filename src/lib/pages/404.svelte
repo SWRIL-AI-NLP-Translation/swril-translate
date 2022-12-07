@@ -14,6 +14,7 @@
 		position: relative;
 		overflow: hidden;
 		height: 100vh;
+		width: 100%;
 		> * {
 			position: absolute;
 			user-select: none;

@@ -1,5 +1,7 @@
 <script lang="ts">
+	import { goto } from "$app/navigation";
 	import { COLORS } from "$lib/styles/colors";
+	import Icon from "./icons/Icon.svelte";
 	import Logout from "./icons/logout.svelte";
 	import Settings from "./icons/settings.svelte";
 
@@ -7,31 +9,41 @@
 
 </script>
 
-<div>
-	<div class="settingsButton">
-		<Settings on:click={()=>{console.log("hi"); signInDisplay = !signInDisplay}} color={COLORS.darkGrey}/>
+<div class="container">
+	<div class="settingsButton" on:click={()=>{console.log("hi"); signInDisplay = !signInDisplay}} >
+		<Icon icon="settings" color={COLORS.darkGrey}/>
 	</div>
-	<button class="signInButton" style={`display: ${signInDisplay?'flex':'none'}`}>
-		<Logout color={COLORS.darkGrey}/>
+	<button 
+		class="signInButton" 
+		style={`display: ${signInDisplay?'flex':'none'}`}
+		on:click={()=>{goto('/login')}}
+	>
+		<Icon icon="logout" height={'1.5rem'} width={'1.5rem'} color={COLORS.darkGrey}/>
 		<p>Sign in</p>
 	</button>
 </div>
 
 <style lang="scss">
+	.container {
+		position: relative
+	}
 	.settingsButton {
 		height: 2rem;
 		width: 2rem;
 		cursor: pointer;
 	}
 	.signInButton {
+		position: absolute;
 		cursor: pointer;
-		height: 2rem;
-		width: 6rem;
+		right: 0;
+		max-height: 2rem;
+		width: 7rem;
 		background-color: white;
 		flex-direction: row;
 		align-items: center;
 		justify-content: center;
 		border-radius: 0.5rem;
+		padding: 0.3rem;
 		p {
 			font-size: 1rem;
 			text-align: center;

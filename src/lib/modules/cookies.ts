@@ -16,6 +16,9 @@ export class Cookies {
 		}
 		return '';
 	}
+	static set (cname: string, cvalue: string) {
+		document.cookie = cname + '=' + cvalue + '; path=/';
+	}
 	static get (cname:string) {
 		return Cookies.getFrom(cname, document.cookie)
 	}

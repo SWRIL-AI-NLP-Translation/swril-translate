@@ -114,9 +114,10 @@
 		header {
 			display:flex;
 			justify-content: space-between;
+			background-color: color('secondary');
 			align-items: center;
 			width: calc(100% - 2rem);
-			margin: 1rem 1rem 1rem;
+			padding: 1rem 1rem 1rem;
 			h1 {
 				font-size: 2rem;
 				text-align: center;
