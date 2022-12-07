@@ -79,7 +79,7 @@
 				console.error(res.errors)
 			} else {
 				if (data?.user) {
-					data.user.translations.push(saveTranslation)
+					data.user.translations = [...data.user.translations, saveTranslation]
 					alert('Saved translation to your account')
 				} else {
 					alert('You must be logged in to save translations')
