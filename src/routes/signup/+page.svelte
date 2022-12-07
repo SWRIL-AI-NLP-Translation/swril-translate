@@ -49,7 +49,7 @@
 			} else {
 				alert("Account created successfully")
 				Cookies.set('token', data.token)
-				goto('/')
+				window.location.href = '/'
 			}
 		} catch (e) {
 			console.error(e)
