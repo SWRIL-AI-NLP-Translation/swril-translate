@@ -53,6 +53,10 @@
 		}
 	}
 	const trySaveTranslation = async () => {
+		if (!data.user) {
+			alert('You must be logged in to save translations')
+			return
+		}
 		if (translation.length === 0) return
 		const textInput:HTMLInputElement|null = document.querySelector("#textInput");
 		const fromLanguageInput:HTMLInputElement|null = document.querySelector("#fromLanguageInput");
