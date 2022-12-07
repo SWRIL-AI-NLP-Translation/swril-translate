@@ -10,15 +10,17 @@
 	import SettingsMenu from '$lib/components/SettingsMenu.svelte';
 	import { languages } from '$lib/types/languages';
 	import type { HomeData } from './+page';
+	import Icon from '$lib/components/icons/Icon.svelte';
+	import { SAVE_TRANSLATION } from '$lib/data/mutations/saveTranslation';
+	import SavedTranslationGrid from '$lib/components/SavedTranslationGrid.svelte';
 	export let data: HomeData;
 
 	let fromLanguage = 'English';
 	let toLanguage = 'French';
 
-	let translation = '';
+	$: translation = '';
 
 	let tryTranslate = async () => {
-		translation = '';
 		const textInput:HTMLInputElement|null = document.querySelector("#textInput");
 		const fromLanguageInput:HTMLInputElement|null = document.querySelector("#fromLanguageInput");
 		const toLanguageInput:HTMLInputElement|null = document.querySelector("#toLanguageInput");
@@ -50,6 +52,43 @@
 			console.error(e)
 		}
 	}
+	const trySaveTranslation = async () => {
+		if (translation.length === 0) return
+		const textInput:HTMLInputElement|null = document.querySelector("#textInput");
+		const fromLanguageInput:HTMLInputElement|null = document.querySelector("#fromLanguageInput");
+		const toLanguageInput:HTMLInputElement|null = document.querySelector("#toLanguageInput");
+		let text;
+		if (textInput && toLanguageInput && fromLanguageInput) {
+			text = textInput.value;
+			fromLanguage = fromLanguageInput.value;
+			toLanguage = toLanguageInput.value;
+		}
+		else return
+		if (text.length === 0) return
+		try {
+			const res = await graphql.request(SAVE_TRANSLATION, {
+				data: {
+					to_text: translation,
+					from_language: fromLanguage,
+					to_language: toLanguage,
+					from_text: text,
+				},
+			})
+			const saveTranslation = res.saveTranslation
+			if (!saveTranslation) {
+				console.error(res.errors)
+			} else {
+				if (data?.user) {
+					data.user.translations.push(saveTranslation)
+					alert('Saved translation to your account')
+				} else {
+					alert('You must be logged in to save translations')
+				}
+			}
+		} catch (e) {
+			console.error(e)
+		}
+	}
 	const swap = () => {
 		const fromLanguageInput:HTMLInputElement|null = document.querySelector("#fromLanguageInput");
 		const toLanguageInput:HTMLInputElement|null = document.querySelector("#toLanguageInput");
@@ -64,9 +103,9 @@
 
 <article>
 	<header>
-		<div>
-			<Star color={COLORS.darkGrey}/>
-		</div>
+		<button on:click={trySaveTranslation}>
+			<Icon icon="star" width='2rem' height='2rem' color={COLORS.darkGrey}/>
+		</button>
 		<h1>Translate</h1>
 		<SettingsMenu user={data.user} />
 	</header>
@@ -109,6 +148,14 @@
 			</button>
 		</div>
 	</section>
+
+	{#if data?.user}
+		<section class="previousTranslations">
+			<h5>Previous translations</h5>
+			<SavedTranslationGrid translations={data.user.translations}/>
+		</section>
+	{/if}
+	
 
 </article>
 
@@ -209,6 +256,14 @@
 						width: 2rem;
 					}
 				}
+			}
+		}
+		.previousTranslations {
+			h5 {
+				margin: 1rem 0 0.5rem;
+				font-size: 1.5rem;
+				text-align: center;
+				color: color('_darkGrey')
 			}
 		}
 	}
