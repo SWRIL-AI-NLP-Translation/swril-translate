@@ -9,6 +9,8 @@
 	import { TRANSLATION } from '$lib/data/queries/translate';
 	import SettingsMenu from '$lib/components/SettingsMenu.svelte';
 	import { languages } from '$lib/types/languages';
+	import type { HomeData } from './+page';
+	export let data: HomeData;
 
 	let fromLanguage = 'English';
 	let toLanguage = 'French';
@@ -48,6 +50,16 @@
 			console.error(e)
 		}
 	}
+	const swap = () => {
+		const fromLanguageInput:HTMLInputElement|null = document.querySelector("#fromLanguageInput");
+		const toLanguageInput:HTMLInputElement|null = document.querySelector("#toLanguageInput");
+		if (fromLanguageInput && toLanguageInput) {
+			const temp = fromLanguageInput.value;
+			fromLanguageInput.value = toLanguageInput.value;
+			toLanguageInput.value = temp;
+			translation = ''
+		}
+	}
 </script>
 
 <article>
@@ -56,7 +68,7 @@
 			<Star color={COLORS.darkGrey}/>
 		</div>
 		<h1>Translate</h1>
-		<SettingsMenu/>
+		<SettingsMenu user={data.user} />
 	</header>
 	<section class="languageSelect">
 		<select value={fromLanguage} class="fromLanguage" id="fromLanguageInput" on:change={tryTranslate}>
@@ -64,7 +76,10 @@
 				<option value={language}>{language}</option>
 			{/each}
 		</select>
-		<button class="swapIcon">
+		<button 
+			class="swapIcon"
+			on:click={swap}
+		>
 			<Swap color={COLORS.darkGrey}/>
 		</button>
 		<select value={toLanguage} class="toLanguage" id="toLanguageInput"  on:change={tryTranslate}>
@@ -80,6 +95,7 @@
 			id="textInput" 
 			placeholder="Enter text here..." 
 			on:keydown={(e) => {if (e.key === 'Enter') tryTranslate()}}
+			on:focusout={tryTranslate}
 		></textarea>
 		<p>
 			{translation}
@@ -101,16 +117,13 @@
 		background-color: transparent;
 		border: none;
 		outline: none;
-		cursor: pointer;
 	}
 	article {
 		display: flex;
 		flex-direction: column;
 		align-items: center;
 		justify-content: center;
-		* {
-			max-width: 25rem;
-		}
+		max-width: 25rem;
 		header {
 			display:flex;
 			justify-content: space-between;
@@ -169,7 +182,7 @@
 				resize:vertical;
 				font-size: 1.3rem;
 			}
-			p {
+			>p {
 				border-top: 1px solid color('_darkGrey');
 				padding: 0.6rem;
 				width: 100%;

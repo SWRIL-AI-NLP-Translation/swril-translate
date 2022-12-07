@@ -3,7 +3,7 @@ import { GET_USER } from '$lib/data/queries/getUser';
 import type { UserType } from '$lib/types/user';
 import { error } from '@sveltejs/kit';
 // import { graphql } from '$lib/data/graphql';
-import type { LayoutServerLoadReturn } from './+layout.server';
+import type { LayoutServerLoadReturn } from '../+layout.server';
 
 
 export interface HomeData {	

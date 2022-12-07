@@ -1,16 +1,17 @@
 <script lang="ts">
 	import { goto } from "$app/navigation";
 	import { COLORS } from "$lib/styles/colors";
+	import type { UserType } from "$lib/types/user";
 	import Icon from "./icons/Icon.svelte";
-	import Logout from "./icons/logout.svelte";
-	import Settings from "./icons/settings.svelte";
+	
+	export let user:UserType|undefined;
 
 	let signInDisplay = false;
 
 </script>
 
 <div class="container">
-	<div class="settingsButton" on:click={()=>{console.log("hi"); signInDisplay = !signInDisplay}} >
+	<div class="settingsButton" on:click={user?()=>{goto('/settings')}:()=>{console.log("hi"); signInDisplay = !signInDisplay}} >
 		<Icon icon="settings" color={COLORS.darkGrey}/>
 	</div>
 	<button 

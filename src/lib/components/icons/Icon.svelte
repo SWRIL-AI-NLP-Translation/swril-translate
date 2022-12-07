@@ -1,6 +1,9 @@
 <script lang="ts">
 	import { COLORS } from '$lib/styles/colors';
 	import Account from './account.svelte';
+	import Edit from './edit.svelte';
+	import Help from './help.svelte';
+	import LeftArrow from './leftArrow.svelte';
 	import Logout from './logout.svelte';
 	import Settings from './settings.svelte';
 	import Star from './star.svelte';
@@ -10,7 +13,10 @@
 		"star",
 		"settings",
 		"swap",
-		"account"
+		"account",
+		"leftArrow",
+		"edit",
+		"help",
 	]
 	export let color = COLORS.font;
 	export let height: string|undefined = undefined
@@ -29,5 +35,11 @@
 		<Swap color={color}/>
 	{:else if icon == "account"}
 		<Account color={color}/>
+	{:else if icon == "leftArrow"}
+		<LeftArrow color={color}/>
+	{:else if icon == "edit"}
+		<Edit color={color}/>
+	{:else if icon == "help"}
+		<Help color={color}/>
 	{/if}
 </div>
