@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { goto } from '$app/navigation';
 	import { COLORS } from '$lib/styles/colors';
 	import Swap from '$lib/components/icons/swap.svelte';
 	import Upload from '$lib/components/icons/upload.svelte';
@@ -41,7 +42,6 @@
 					text,
 				},
 			})
-			console.log(res)
 			const data = res.translation
 			if (!data) {
 				console.error(res.errors)
@@ -148,7 +148,7 @@
 			value={translation}
 		></textarea>
 		<div class="document">
-			<button on:click={() => {}}>
+			<button on:click={() => {goto('/upload')}}>
 				<div>
 					<Upload color={COLORS.primary}/>
 				</div>
@@ -258,6 +258,7 @@
 				width: 100%;
 				font-size: 1.3rem;
 				background-color: white;
+				resize: none;
 			}
 			.document {
 				display: flex;
