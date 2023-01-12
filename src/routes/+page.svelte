@@ -1,8 +1,5 @@
 <script lang="ts">
-	import { goto } from '$app/navigation';
-	import Settings from '$lib/components/icons/settings.svelte';
 	import { COLORS } from '$lib/styles/colors';
-	import Star from '$lib/components/icons/star.svelte';
 	import Swap from '$lib/components/icons/swap.svelte';
 	import Upload from '$lib/components/icons/upload.svelte';
 	import { graphql } from '$lib/data/graphql';
@@ -32,7 +29,10 @@
 			toLanguage = toLanguageInput.value;
 		}
 		else return
-		if (text.length === 0) return
+		if (text.length === 0) {
+			translation = ''
+			return
+		}
 		try {
 			const res = await graphql.request(TRANSLATION, {
 				data: {
@@ -139,16 +139,20 @@
 			placeholder="Enter text here..." 
 			on:keydown={(e) => {if (e.key === 'Enter') tryTranslate()}}
 			on:focusout={tryTranslate}
+			on:change={() => {translation = ''}}
 		></textarea>
-		<p>
-			{translation}
-		</p>
+		<textarea 
+			id="textOutput" 
+			disabled
+			placeholder="Hit enter to translate" 
+			value={translation}
+		></textarea>
 		<div class="document">
 			<button on:click={() => {}}>
 				<div>
 					<Upload color={COLORS.primary}/>
 				</div>
-				<p>Document</p>
+				<p>Upload Document</p>
 			</button>
 		</div>
 	</section>
@@ -201,7 +205,13 @@
 			.swapIcon {
 				height: 4rem;
 				width: 4rem;
+				// padding: 1rem;
+				border-radius: 50%;
 				margin: 0 1rem;
+				transition: rotate 0.4s ease-in-out;
+				&:hover {
+					rotate: 180deg;
+				}
 			}
 			.fromLanguage, .toLanguage {
 				display: flex;
@@ -214,17 +224,25 @@
 				color: white;
 				width: 100%;
 				height: 100%;
+				border: 0.2rem solid transparent;
+				transition: border-color 0.2s ease-in-out;
 			}
 			.fromLanguage {
 				background-color: color('swr_green');
+				&:hover {
+					border-color: color('swr_blue');
+				}
 			}
 			.toLanguage {
 				background-color: color('swr_blue');
+				&:hover {
+					border-color: color('swr_green');
+				}
 			}
 		}
 		.textArea {
 			width: 100%;
-			textarea {
+			#textInput {
 				border: none;
 				border-radius: 0.5rem 0.5rem 0 0;
 				padding: 0.6rem;
@@ -233,7 +251,8 @@
 				resize:vertical;
 				font-size: 1.3rem;
 			}
-			>p {
+			#textOutput {
+				border: none;
 				border-top: 1px solid color('_darkGrey');
 				padding: 0.6rem;
 				width: 100%;
@@ -253,11 +272,23 @@
 					display: flex;
 					align-items: center;
 					justify-content: center;
-					border: none;
-					background-color: white;
+					border: 0.2rem solid transparent;
+					// padding: 0.3rem 0.5rem;
+					border-radius: 0.5rem;
+					transition: border-color 0.2s ease-in-out;
+					// box-sizing:border-box;
+					&:hover {
+						border-color: color('swr_blue');
+					}
 					div {
 						height: 2rem;
 						width: 2rem;
+					}
+					p {
+						margin: 0.3rem 0.5rem;
+						font-size: 1.2rem;
+						// color: black;
+						font-weight: bold;
 					}
 				}
 			}
