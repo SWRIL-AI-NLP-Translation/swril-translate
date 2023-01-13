@@ -24,11 +24,17 @@
 		name: 'Saved translations',
 		link: '/saved'
 	},
+		{
+		icon: 'star',
+		name: 'Saved Documents',
+		link: '/documents'
+	},
 	{
 		icon: 'help',
 		name: 'About website',
 		link: '/about'
-	}]
+	}
+]
 	
 </script>
 

@@ -1,4 +1,5 @@
 import type { SavedTranslationType } from "./translation"
+import type { UserFile } from "./userFile"
 
 export interface UserType {
 	id: string
@@ -8,4 +9,5 @@ export interface UserType {
     email: string
     created_at: string
 	translations: SavedTranslationType[]
+	files?: UserFile[]
 }

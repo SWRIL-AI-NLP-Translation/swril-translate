@@ -11,6 +11,8 @@
 	import Icon from '$lib/components/icons/Icon.svelte';
 	import { SAVE_TRANSLATION } from '$lib/data/mutations/saveTranslation';
 	import SavedTranslationGrid from '$lib/components/SavedTranslationGrid.svelte';
+	import { savedText } from '$lib/data/stores';
+	import { onMount } from 'svelte';
 	export let data: HomeData;
 
 	let fromLanguage = 'English';
@@ -52,6 +54,19 @@
 			console.error(e)
 		}
 	}
+
+	let savedTranslation:string = '';
+	savedText.subscribe(value => {savedTranslation = value})
+	onMount(() => {
+		if (savedTranslation.length > 0) {
+			const textInput:HTMLInputElement|null = document.querySelector("#textInput");
+			if (textInput) {
+				textInput.value = savedTranslation;
+				tryTranslate();
+			}
+		}
+	})
+
 	const trySaveTranslation = async () => {
 		if (!data.user) {
 			alert('You must be logged in to save translations')
@@ -137,16 +152,16 @@
 		<textarea 
 			id="textInput" 
 			placeholder="Enter text here..." 
+			value={savedTranslation}
 			on:keydown={(e) => {if (e.key === 'Enter') tryTranslate()}}
 			on:focusout={tryTranslate}
 			on:change={() => {translation = ''}}
 		></textarea>
-		<textarea 
+		<p 
 			id="textOutput" 
-			disabled
 			placeholder="Hit enter to translate" 
-			value={translation}
-		></textarea>
+		>{translation}
+		</p>
 		<div class="document">
 			<button on:click={() => {goto('/upload')}}>
 				<div>
